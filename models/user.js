@@ -1,4 +1,4 @@
-const e = require("express"),
+const  jwt = require('jsonwebtoken'),
   { Users } = require("../db");
 
 class User{
@@ -31,6 +31,16 @@ class User{
     }
     else{
         return false;
+    }
+  }
+
+  validateToken(token){
+    try{
+     let data =  jwt.verify(token.split(" ")[1],process.env.SECRET);
+    return data.exp<Date.now()/1000? false: data;
+    }
+    catch(err){
+     return false;
     }
   }
 

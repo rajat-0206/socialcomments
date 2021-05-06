@@ -1,7 +1,7 @@
-const { response } = require("express");
-
+require("dotenv").config();
 const express = require("express"),
   bcrypt = require('bcrypt'),
+  jwt = require('jsonwebtoken'),
   app = express(),
   User = require('./models/user'),
   Socialpost = require("./models/post"),
@@ -55,7 +55,8 @@ connectToDB((err, dbname) => {
       let data = await Users().findOne({ email });
       chkcred = await verifyPass(password, data.password);
       if (chkcred) {
-        return result.json({ "id": data._id, "token": "" });
+        let token = jwt.sign({ email }, process.env.SECRET, { expiresIn: "4h" })
+        return result.json({ "id": data._id, "token": token });
       }
       else {
         result.send("Login failed. Please check you credentials")
@@ -67,10 +68,17 @@ connectToDB((err, dbname) => {
   });
 
   app.post("/createPost", async (req, result) => {
-    let { email, title, content, tags } = req.body;
-    chkUser = await User.userExist(email);
+    let { title, content, tags } = req.body;
+    let token = req.body.token;
+    let chkUser = "";
+    if (token) {
+      chkUser = User.validateToken("auth " + token);
+    }
+    else {
+      chkUser = User.validateToken(req.headers.authorization);
+    }
     if (chkUser) {
-      postCreated = await Socialpost.createPost(email, title, content, tags);
+      postCreated = await Socialpost.createPost(chkUser.email, title, content, tags);
       result.json(postCreated);
     }
     else {
@@ -79,12 +87,19 @@ connectToDB((err, dbname) => {
   })
 
   app.post("/likepost", async (req, result) => {
-    let { email, postid } = req.body;
-    chkUser = await User.userExist(email);
+    let { postid } = req.body;
+    let token = req.body.token;
+    let chkUser = "";
+    if (token) {
+      chkUser = User.validateToken("auth " + token);
+    }
+    else {
+      chkUser = User.validateToken(req.headers.authorization);
+    }
     if (chkUser) {
       chkPost = await Socialpost.postExist(postid);
       if (chkPost) {
-        likePost = await Socialpost.addLike(email, postid);
+        likePost = await Socialpost.addLike(chkUser.email, postid);
         result.json(likePost);
       }
       else {
@@ -98,12 +113,19 @@ connectToDB((err, dbname) => {
 
 
   app.post("/addComment", async (req, result) => {
-    let { email, postid, comment } = req.body;
-    chkUser = await User.userExist(email);
+    let { postid, comment } = req.body;
+    let token = req.body.token;
+    let chkUser = "";
+    if (token) {
+      chkUser = User.validateToken("auth " + token);
+    }
+    else {
+      chkUser = User.validateToken(req.headers.authorization);
+    }
     if (chkUser) {
       chkPost = await Socialpost.postExist(postid);
       if (chkPost) {
-        commentPost = await Socialpost.addComment(email, postid, comment);
+        commentPost = await Socialpost.addComment(chkUser.email, postid, comment);
         result.json(commentPost);
       }
       else {
@@ -117,6 +139,17 @@ connectToDB((err, dbname) => {
 });
 
 app.get("/getLikedPosts", async (req, res) => {
+  let token = req.body.token;
+  let chkUser = "";
+    if (token) {
+      chkUser = User.validateToken("auth " + token);
+    }
+    else {
+      chkUser = User.validateToken(req.headers.authorization);
+    }
+  if (!chkUser) {
+    return res.json({ response: "User Authorisation failed" });
+  }
   let allpost = await Posts().find({}).toArray();
   let response = await Promise.all(allpost.map(async (post) => {
     if (post.likes.length != 0) {
@@ -137,30 +170,36 @@ app.get("/getLikedPosts", async (req, res) => {
 
 
 app.get("/getUserComments", async (req, res) => {
-  let { email } = req.body;
-  chkUser = await User.userExist(email);
+  let token = req.body.token;
+  let chkUser = "";
+    if (token) {
+      chkUser = User.validateToken("auth " + token);
+    }
+    else {
+      chkUser = User.validateToken(req.headers.authorization);
+    }
   if (chkUser) {
     let allpost = await Posts().find({}).toArray();
     let response = Array();
-allpost.forEach((post) => {
-      if (post.comments.length != 0 && post.comments.some((ele)=>ele.email==email)) {
+    allpost.forEach((post) => {
+      if (post.comments.length != 0 && post.comments.some((ele) => ele.email == chkUser.email)) {
         let postdic = { "post_id": post._id, "created_by": post.email, "post_title": post.title, "post_content": post.content, "comment": Array() }
 
         post.comments.forEach((comment) => {
-          if (comment.email == email) {
+          if (comment.email == chkUser.email) {
             postdic.comment.push(comment);
           }
         })
         response.push(postdic);
       }
-     
+
     })
     res.json({ "response": response });
   }
-  else{
+  else {
     result.json({ "response": "User authentication failed" });
   }
-  
+
 });
 
 
