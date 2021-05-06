@@ -204,8 +204,8 @@ app.get("/getUserComments", async (req, res) => {
 
 
 
-const server_port = 5000,
-  server_host = "localhost";
+const server_port = process.env.PORT || 5000,
+  server_host = "0.0.0.0" ||"localhost";
 
 app.listen(server_port, server_host, () => {
   console.log(`Server on ${server_host}:${server_port}`)
