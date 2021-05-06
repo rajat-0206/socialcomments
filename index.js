@@ -2,13 +2,16 @@ const express = require("express"),
 bcrypt = require('bcrypt'),
   app = express(),
   User = require('./models/user'),
+  Socialpost = require("./models/post"),
   { connectToDB, Users } = require("./db");
 
 const encrypt = async (plaintext) =>{ 
  return  await bcrypt.hash(plaintext, 10);
 }
 
-const verifyPass = async (userpass,storedpass);
+const verifyPass = async (userpass,storedpass)=>{
+  return await bcrypt.compare(userpass, storedpass);
+}
 
 app.use(express.urlencoded({
   extended: true
@@ -44,11 +47,36 @@ app.use(express.json());
   });
 
   app.post("/login",async (req,result)=>{
-      let {username,password} = req.body;
-      if(User.userExist(username)){
-        
+      let {email,password} = req.body;
+      chkUser = await User.userExist(email);
+      if(chkUser){
+        let data =  await Users().findOne({email});
+        chkcred = await verifyPass(password,data.password);
+        if(chkcred){
+          return result.json({"id":data._id,"token":""});
+        }
+        else{
+          result.send("Login failed. Please check you credentials")
+        }
       }
+      else{
+        result.send("No such user found");
+      }
+  });
+
+  app.post("/createPost",async (req,result)=>{
+    let {email,title,content,tags} = req.body;
+    chkUser = await User.userExist(email);
+    if(chkUser){
+      postCreated = await Socialpost.createPost(email,title,content,tags);
+      result.json(postCreated);
+    }
+    else{
+      result.json({"response":"User authentication failed"});
+    }
   })
+
+  
 
   });
 

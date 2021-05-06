@@ -1,5 +1,4 @@
-const e = require("express");
-const  Joi = require("joi"),
+const e = require("express"),
   { Users } = require("../db");
 
 class User{

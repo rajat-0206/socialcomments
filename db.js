@@ -14,5 +14,6 @@ module.exports = {
         return callback(err,process.env.DBNAME);
       }
     ),
-  Users: () => dbobj.collection("users")
+  Users: () => dbobj.collection("users"),
+  Posts: ()=>dbobj.collection("posts")
 };
