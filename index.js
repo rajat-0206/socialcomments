@@ -3,7 +3,7 @@ bcrypt = require('bcrypt'),
   app = express(),
   User = require('./models/user'),
   Socialpost = require("./models/post"),
-  { connectToDB, Users } = require("./db");
+  { connectToDB, Users, Posts } = require("./db");
 
 const encrypt = async (plaintext) =>{ 
  return  await bcrypt.hash(plaintext, 10);
@@ -42,7 +42,7 @@ app.use(express.json());
           return res.insertedCount==1?result.json({"id":res.ops[0]._id}):result.json({"response":"Some unknown error occured"});
         }
         else{
-          return res.send(data);
+          return res.json({"response":data});
         } 
   });
 
@@ -75,6 +75,26 @@ app.use(express.json());
       result.json({"response":"User authentication failed"});
     }
   })
+
+  app.post("/likepost",async (req,result)=>{
+    let {email,postid} = req.body;
+    chkUser = await User.userExist(email);
+    if(chkUser){
+      chkPost = await Posts.postExist(postid);
+      if(chkPost){
+        likePost = await addLike(postid,emailid);
+        result.json(likePost);
+      }
+      else{
+        result.json({"response":"No such post exist"});
+      }
+    }
+    else{
+      result.json({"response":"User authentication failed"});
+    }
+    
+
+  } )
 
   
 
