@@ -155,7 +155,7 @@ or
 
 ### Request
 
-`GET https://socialcomments.herokuapp.com//getLikedPosts`
+`GET https://socialcomments.herokuapp.com/getLikedPosts`
 
     {
         "token":"<auth token>"
