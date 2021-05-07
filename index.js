@@ -25,7 +25,7 @@ connectToDB((err, dbname) => {
 
 
   app.get("/", (req, res) => {
-    return res.send("Yayyy your are successfully connected to the project. Please read below to find readme documentation");
+    return res.send("Yayyy your are successfully connected to the project. Please visit <a href='https://github.com/rajat-0206/socialcomments/blob/main/readme.md'>here</a> to find api documentation");
   })
 
   app.post("/signup", async (req, result) => {
