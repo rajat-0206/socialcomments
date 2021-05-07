@@ -41,6 +41,9 @@ class Post{
     }
 
     async addComment(email,postid,comment){
+        if(!comment){
+            return "Comment is required";
+        }
         // let data = await Posts().findOne({_id:ObjectId(postid)});
         // let comments = data.comments;
         let newcomment = new Comment(email,comment,postid);
@@ -51,7 +54,7 @@ class Post{
 
 
     async createPost(email,title,content,tags){
-        if(title!="" && content!=""){
+        if(!title && !content){
             let comments = Array();
             let likes = Array();
             if(!tags){

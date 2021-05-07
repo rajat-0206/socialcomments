@@ -50,7 +50,7 @@ Now visit localhost:5000 to check if project is running successfully.
 
 ### Request
 
-`POST localhost:5000/signup`
+`POST https://socialcomments.herokuapp.com/signup`
 
     {
         "email": "<some valid email address>",
@@ -70,7 +70,7 @@ Now visit localhost:5000 to check if project is running successfully.
 
 ### Request
 
-`POST localhost:5000/login`
+`POST https://socialcomments.herokuapp.com/login`
 
     {
         "email": "<some valid email address>",
@@ -92,7 +92,7 @@ The token recieved in this api is valid for 4 hours. The token can be sent via r
 
 ### Request
 
-`POST localhost:5000/createPost`
+`POST https://socialcomments.herokuapp.com/createPost`
 
     {
         "title": "<some valid string>",
@@ -113,7 +113,7 @@ The token recieved in this api is valid for 4 hours. The token can be sent via r
 If the post is already liked the api will dislike the post and vice versa.
 ### Request
 
-`POST localhost:5000/likepost`
+`POST https://socialcomments.herokuapp.com/likepost`
 
     {
         "postid": "<some valid post id>",
@@ -137,10 +137,9 @@ or
 
 ### Request
 
-`POST localhost:5000/addComment`
+`POST https://socialcomments.herokuapp.com/addComment`
 
     {
-        "email": "<some valid email>",
         "postid": "<some valid string>",
         "comment":"<some valid string for comment>",
         "token":"<auth token>"
@@ -156,7 +155,7 @@ or
 
 ### Request
 
-`GET localhost:5000/likepost`
+`GET https://socialcomments.herokuapp.com/likepost`
 
     {
         "token":"<auth token>"
@@ -187,7 +186,7 @@ or
 
 ### Request
 
-`GET localhost:5000/getUserComments`
+`GET https://socialcomments.herokuapp.com/getUserComments`
 
     {
         "token":"<auth token>"
