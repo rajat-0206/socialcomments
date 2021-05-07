@@ -25,7 +25,7 @@ connectToDB((err, dbname) => {
 
 
   app.get("/", (req, res) => {
-    return res.send("Yayyy your are successfully connected to the project");
+    return res.send("Yayyy your are successfully connected to the project. Please read below to find readme documentation");
   })
 
   app.post("/signup", async (req, result) => {
@@ -59,11 +59,11 @@ connectToDB((err, dbname) => {
         return result.json({ "id": data._id, "token": token });
       }
       else {
-        result.send("Login failed. Please check you credentials")
+        result.json({"response":"Login failed. Please check you credentials"})
       }
     }
     else {
-      result.send("No such user found");
+      result.json({"response":"No such user found"});
     }
   });
 
@@ -100,7 +100,7 @@ connectToDB((err, dbname) => {
       chkPost = await Socialpost.postExist(postid);
       if (chkPost) {
         likePost = await Socialpost.addLike(chkUser.email, postid);
-        result.json(likePost);
+        result.json({"response":likePost});
       }
       else {
         result.json({ "response": "No such post exist" });
@@ -165,7 +165,7 @@ app.get("/getLikedPosts", async (req, res) => {
 
   })
   )
-  res.json({ "response": response });
+  res.json({ "response": response.filter((ele)=>ele!=null) });
 });
 
 
