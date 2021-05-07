@@ -156,7 +156,7 @@ app.get("/getLikedPosts", async (req, res) => {
       let postdic = { "post_id": post._id, "created_by": post.email, "post_title": post.title, "post_content": post.content, "likedBy": Array() }
       postdic.likedBy = await Promise.all(post.likes.map(async (email) => {
         let details = await Users().findOne({ email });
-        let temp = { "name": details.name, "comment_id": details._id };
+        let temp = { "name": details.name, "user_id": details._id };
         return temp;
       })
       )
