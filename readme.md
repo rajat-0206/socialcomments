@@ -12,9 +12,9 @@ Follow the below instruction to correctly setup and run the project.
 
 Run the following command to clone the project
 
-"""
+```
 git clone https://github.com/rajat-0206/socialcomments
-"""
+```
 
 ## Setting up the project
 
@@ -23,20 +23,20 @@ git clone https://github.com/rajat-0206/socialcomments
 - Fill in all the values in your <strong>.env</strong> file.
 - Now install the dependencies required for the project. From the root of the project run the following command.
 
-    """
+    ```
     npm install
-    """    
+    ```    
 ## Running the project
 
 To run and test the project, run the following command from root of the project.
 
-"""
+```
 node index.js
-"""
+```
 Additionally, if you have nodemon installed in your pc, then you can run the following command to start the server
-"""
+```
 nodemon serve
-"""
+```
 Now visit localhost:5000 to check if project is running successfully.
 
 
@@ -50,7 +50,7 @@ Now visit localhost:5000 to check if project is running successfully.
 
 ### Request
 
-"POST localhost:5000/signup"
+`POST localhost:5000/signup`
 
     {
         "email": "<some valid email address>",
@@ -60,17 +60,17 @@ Now visit localhost:5000 to check if project is running successfully.
     }
 
 ### Response
-"""
+```
 {
     "id":"<created user id>"
 }
-"""
+```
 
 ## Login
 
 ### Request
 
-"POST localhost:5000/login"
+`POST localhost:5000/login`
 
     {
         "email": "<some valid email address>",
@@ -78,12 +78,12 @@ Now visit localhost:5000 to check if project is running successfully.
     }
 
 ### Response
-"""
+```
 {
     "id":"<created user id>",
     "token":"<token for user verification>"
 }
-"""
+```
 The token recieved in this api is valid for 4 hours. The token can be sent via request body or as bearer token in request header.
 
 
@@ -92,7 +92,7 @@ The token recieved in this api is valid for 4 hours. The token can be sent via r
 
 ### Request
 
-"POST localhost:5000/createPost"
+`POST localhost:5000/createPost`
 
     {
         "title": "<some valid string>",
@@ -102,18 +102,18 @@ The token recieved in this api is valid for 4 hours. The token can be sent via r
     }
 
 ### Response
-"""
+```
 {
     "id":"<created post id>",
 }
-"""
+```
 
 
 ## Like or dislike post
 If the post is already liked the api will dislike the post and vice versa.
 ### Request
 
-"POST localhost:5000/likepost"
+`POST localhost:5000/likepost`
 
     {
         "postid": "<some valid post id>",
@@ -121,7 +121,7 @@ If the post is already liked the api will dislike the post and vice versa.
     }
 
 ### Response
-"""
+```
 {
     "response": "Post was liked"
 }
@@ -131,13 +131,13 @@ or
 {
     "response": "Post was disliked"
 }
-"""
+```
 
 ## Create Comments
 
 ### Request
 
-"POST localhost:5000/addComment"
+`POST localhost:5000/addComment`
 
     {
         "email": "<some valid email>",
@@ -147,23 +147,23 @@ or
     }
 
 ### Response
-"""
+```
 "Comment was successfully posted"
-"""
+```
 
 
 ## Get all liked post with users who liked it
 
 ### Request
 
-"GET localhost:5000/likepost"
+`GET localhost:5000/likepost`
 
     {
         "token":"<auth token>"
     }
 
 ### Response
-"""
+```
 {
     "response": [
         {
@@ -180,21 +180,21 @@ or
         }
     ]
 }
-"""
+```
 
 
 ## Get all user commented post
 
 ### Request
 
-"GET localhost:5000/getUserComments"
+`GET localhost:5000/getUserComments`
 
     {
         "token":"<auth token>"
     }
 
 ### Response
-"""
+```
 {
     "response": [
         {
@@ -213,4 +213,4 @@ or
         }
     ]
 }
-"""
+```
