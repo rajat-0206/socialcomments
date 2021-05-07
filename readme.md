@@ -173,7 +173,7 @@ or
             "likedBy": [
                 {
                     "name": "<some name>",
-                    "comment_id": "<some comment id>"
+                    "user_id": "<some user id>"
                 }
             ]
         }
